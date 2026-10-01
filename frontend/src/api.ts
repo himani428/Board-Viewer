@@ -1,4 +1,5 @@
-export const API = "http://localhost:4000";
+// Local: the mock backend on :4000. Deployed: set VITE_API_URL (no trailing slash) in the host's build settings.
+export const API: string = (import.meta.env.VITE_API_URL as string | undefined) || "http://localhost:4000";
 import type { Screen } from "./types";
 
 function qs(params: Record<string, string | number | undefined>) {

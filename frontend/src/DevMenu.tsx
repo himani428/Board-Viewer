@@ -9,7 +9,7 @@ export function DevMenu() {
   const [open, setOpen] = useState(false);
   const dev = useStore((s) => s.dev);
   const [region, setRegion] = useState<"board" | "preview" | "layers" | "inspector">("layers");
-  if (!import.meta.env.DEV) return null;
+  if (!import.meta.env.DEV && import.meta.env.VITE_SHOW_DEV !== "1") return null; // set VITE_SHOW_DEV=1 to show it in a deployed build
   const target = () => getState().active ?? getState().screens.list[0]?.id ?? null;
   const run = (fn: (id: string) => void) => guard("board", { screenId: null }, () => { const id = target(); if (id) fn(id); setOpen(false); });
   const item = (label: string, fn: () => void) => <div key={label}><Btn small onClick={guard("board", { screenId: null }, () => { fn(); setOpen(false); })} style={{ width: "100%", textAlign: "left", marginBottom: 4 }}>{label}</Btn></div>;
