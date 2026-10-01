@@ -1,5 +1,12 @@
-// Local: the mock backend on :4000. Deployed: set VITE_API_URL (no trailing slash) in the host's build settings.
-export const API: string = (import.meta.env.VITE_API_URL as string | undefined) || "http://localhost:4000";
+// Local: the mock backend on :4000. Deployed: set VITE_API_URL in the host's build settings.
+// Forgiving on purpose: a missing https:// or a trailing slash would otherwise turn into a confusing 404.
+function normalizeBase(raw: string | undefined): string {
+  let v = (raw ?? "").trim();
+  if (!v) return "http://localhost:4000";
+  if (!/^https?:\/\//i.test(v)) v = "https://" + v;
+  return v.replace(/\/+$/, "");
+}
+export const API: string = normalizeBase(import.meta.env.VITE_API_URL as string | undefined);
 import type { Screen } from "./types";
 
 function qs(params: Record<string, string | number | undefined>) {
